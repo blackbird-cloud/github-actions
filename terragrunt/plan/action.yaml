@@ -8,7 +8,19 @@ inputs:
   matrix:
     description: 'folders to run the plan on'
     required: true
-    default: 'default'
+    default: '.'
+  aws-region:
+    description: 'AWS region'
+    required: false
+    default: 'eu-central-1'
+  aws-role-to-assume:
+    description: 'AWS IAM role to assume'
+    required: false
+  aws-role-session-name:
+    description: 'AWS Session name for the assumed role'
+    required: false
+    default: 'github-action'
+
 runs:
   using: "composite"
   steps:
@@ -18,6 +30,10 @@ runs:
     - name: AWS Login
       if: ${{ inputs.cloud == 'AWS' }}
       uses: blackbird-cloud/github-actions/terragrunt/aws@main
+      with:
+        region: ${{ inputs.aws-region }}
+        role-to-assume: ${{ inputs.aws-role-to-assume }}
+        role-session-name:  ${{ inputs.aws-role-session-name }}
 
     - name: Terragrunt Plan
       uses: gruntwork-io/terragrunt-action@v2
