@@ -1,0 +1,28 @@
+name: 'Run Terraform Plan'
+description: 'Run Terraform Plan'
+inputs:
+  cloud:
+    description: 'Cloud to run the plan on'
+    required: true
+    default: 'AWS'
+  matrix:
+    description: 'folders to run the plan on'
+    required: true
+    default: 'default'
+runs:
+  using: "composite"
+  steps:
+    - name: Checkout
+      uses: blackbird-cloud/github-actions/checkout@main
+
+    - name: AWS Login
+      if: ${{ inputs.cloud == 'AWS' }}
+      uses: blackbird-cloud/github-actions/terragrunt/aws@main
+
+    - name: Terragrunt Plan
+      uses: gruntwork-io/terragrunt-action@v2
+      with:
+        tf_version: ${{ env.tf_version }}
+        tg_version: ${{ env.tg_version }}
+        tg_dir: ${{ inputs.matrix }}
+        tg_command: 'run-all plan'
