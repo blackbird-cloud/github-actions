@@ -1,0 +1,21 @@
+name: 'Initial Terraform Setup'
+description: 'Git checkout and run changed-files'
+inputs:
+  folder: 
+    description: 'Folder to check for changes'
+    required: true
+    default: '.'
+outputs:
+  files: 
+    description: 'List of changed files'
+    value: ${{ steps.changed-files.outputs.files }}
+runs:
+  using: "composite"
+  steps:
+    - name: Checkout
+      uses: ../checkout
+
+    - uses: ../changed-files
+      id: changed-files
+      with: 
+        folder: ${{ inputs.folder }}
