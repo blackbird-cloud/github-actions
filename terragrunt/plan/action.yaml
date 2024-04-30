@@ -1,28 +1,29 @@
-name: 'Run Terraform Plan'
-description: 'Run Terraform Plan'
+---
+name: Run Terraform Plan
+description: Run Terraform Plan
 inputs:
   cloud:
-    description: 'Cloud to run the plan on'
+    description: Cloud to run the plan on
     required: true
-    default: 'AWS'
+    default: AWS
   matrix:
-    description: 'folders to run the plan on'
+    description: folders to run the plan on
     required: true
-    default: '.'
+    default: .
   aws-region:
-    description: 'AWS region'
+    description: AWS region
     required: false
-    default: 'eu-central-1'
+    default: eu-central-1
   aws-role-to-assume:
-    description: 'AWS IAM role to assume'
+    description: AWS IAM role to assume
     required: false
   aws-role-session-name:
-    description: 'AWS Session name for the assumed role'
+    description: AWS Session name for the assumed role
     required: false
-    default: 'github-action'
+    default: github-action
 
 runs:
-  using: "composite"
+  using: composite
   steps:
     - name: Checkout
       uses: blackbird-cloud/github-actions/checkout@main
@@ -33,7 +34,7 @@ runs:
       with:
         region: ${{ inputs.aws-region }}
         role-to-assume: ${{ inputs.aws-role-to-assume }}
-        role-session-name:  ${{ inputs.aws-role-session-name }}
+        role-session-name: ${{ inputs.aws-role-session-name }}
 
     - name: Terragrunt Plan
       uses: gruntwork-io/terragrunt-action@v2
@@ -41,4 +42,4 @@ runs:
         tf_version: ${{ env.tf_version }}
         tg_version: ${{ env.tg_version }}
         tg_dir: ${{ inputs.matrix }}
-        tg_command: 'run-all plan'
+        tg_command: run-all plan

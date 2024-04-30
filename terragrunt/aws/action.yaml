@@ -1,21 +1,22 @@
-name: 'AWS Login'
-description: 'Login to AWS using IAM role'
+---
+name: AWS Login
+description: Login to AWS using IAM role
 inputs:
   region:
-    description: 'AWS region'
+    description: AWS region
     required: true
-    default: 'eu-central-1'
+    default: eu-central-1
   role-to-assume:
-    description: 'IAM role to assume'
+    description: IAM role to assume
     required: false
   role-session-name:
-    description: 'Session name for the assumed role'
+    description: Session name for the assumed role
     required: false
-    default: 'github-action'
+    default: github-action
   audience:
-    description: 'The intended audience for the web identity token. This is typically the URL of the application that will use the token.'
+    description: The intended audience for the web identity token. This is typically the URL of the application that will use the token.
     required: false
-    default: 'sts.amazonaws.com'
+    default: sts.amazonaws.com
   aws-access-key-id:
     description: AWS Access Key ID. Provide this key if you want to assume a role using access keys rather than a web identity token.
     required: false
@@ -36,7 +37,7 @@ outputs:
     description: The AWS session token for the provided credentials
     value: ${{ steps.aws-role-auth.outputs.aws-session-token || steps.aws-key-auth.outputs.aws-session-token}}
 runs:
-  using: "composite"
+  using: composite
   steps:
     - name: configure aws credentials
       id: aws-role-auth

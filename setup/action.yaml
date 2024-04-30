@@ -1,20 +1,21 @@
-name: 'Initial Terraform Setup'
-description: 'Git checkout and run changed-files'
+---
+name: Initial Terraform Setup
+description: Git checkout and run changed-files
 inputs:
-  folder: 
-    description: 'Folder to check for changes'
+  folder:
+    description: Folder to check for changes
     required: true
-    default: '.'
+    default: .
 outputs:
-  files: 
-    description: 'List of changed files'
+  files:
+    description: List of changed files
     value: ${{ steps.changed-files.outputs.files }}
 runs:
-  using: "composite"
+  using: composite
   steps:
     - uses: blackbird-cloud/github-actions/checkout@main
 
     - uses: blackbird-cloud/github-actions/changed-files@main
       id: changed-files
-      with: 
+      with:
         folder: ${{ inputs.folder }}

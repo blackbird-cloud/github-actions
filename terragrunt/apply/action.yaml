@@ -1,20 +1,21 @@
-name: 'Run Terraform Apply'
-description: 'Run Terraform Apply'
+---
+name: Run Terraform Apply
+description: Run Terraform Apply
 inputs:
-  cloud: 
-    description: 'Cloud to run the apply on'
+  cloud:
+    description: Cloud to run the apply on
     required: true
-    default: 'AWS'
+    default: AWS
   matrix:
-    description: 'folders to run the apply on'
+    description: folders to run the apply on
     required: true
-    default: 'default'
+    default: default
 runs:
-  using: "composite"
+  using: composite
   steps:
     - name: Checkout
       uses: blackbird-cloud/github-actions/checkout@main
-    
+
     - name: AWS Login
       if: ${{ inputs.cloud == 'AWS' }}
       uses: blackbird-cloud/github-actions/terragrunt/aws@main
@@ -25,4 +26,4 @@ runs:
         tf_version: ${{ env.tf_version }}
         tg_version: ${{ env.tg_version }}
         tg_dir: ${{ inputs.matrix }}
-        tg_command: 'run-all apply'
+        tg_command: run-all apply
