@@ -27,6 +27,15 @@ inputs:
   gcloud-workload-identity-provider:
     description: GCloud workload identity provider
     required: false
+  azure-client-id:
+    description: Azure client ID
+    required: false
+  azure-tenant-id:
+    description: Azure tenant ID
+    required: false
+  azure-subscription-id:
+    description: Azure subscription ID
+    required: false
 
 runs:
   using: composite
@@ -50,6 +59,14 @@ runs:
         service-account: ${{ inputs.gcloud-service-account }}
         workload-identity-provider: ${{ inputs.gcloud-workload-identity-provider }}
         sdk-version: ${{ inputs.gcloud-sdk-version }}
+
+    - name: Azure Login
+      if: ${{ inputs.cloud == 'Azure' }}
+      uses: blackbird-cloud/github-actions/providers/azure@main
+      with:
+        client-id: ${{ inputs.azure-client-id }}
+        subscription-id: ${{ inputs.azure-subscription-id }}
+        tenant-id: ${{ inputs.azure-tenant-id }}
 
     - name: Terragrunt Plan
       uses: gruntwork-io/terragrunt-action@v2
