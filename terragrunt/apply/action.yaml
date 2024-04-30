@@ -8,8 +8,35 @@ inputs:
     default: AWS
   matrix:
     description: folders to run the apply on
-    required: true
-    default: default
+    required: false
+    default: .
+  aws-region:
+    description: AWS region
+    required: false
+    default: eu-central-1
+  aws-role-to-assume:
+    description: AWS IAM role to assume
+    required: false
+  aws-role-session-name:
+    description: AWS Session name for the assumed role
+    required: false
+    default: github-action
+  gcloud-service-account:
+    description: GCloud service account
+    required: false
+  gcloud-workload-identity-provider:
+    description: GCloud workload identity provider
+    required: false
+  azure-client-id:
+    description: Azure client ID
+    required: false
+  azure-tenant-id:
+    description: Azure tenant ID
+    required: false
+  azure-subscription-id:
+    description: Azure subscription ID
+    required: false
+
 runs:
   using: composite
   steps:
@@ -18,7 +45,27 @@ runs:
 
     - name: AWS Login
       if: ${{ inputs.cloud == 'AWS' }}
-      uses: blackbird-cloud/github-actions/terragrunt/aws@main
+      uses: blackbird-cloud/github-actions/providers/aws@main
+      with:
+        region: ${{ inputs.aws-region }}
+        role-to-assume: ${{ inputs.aws-role-to-assume }}
+        role-session-name: ${{ inputs.aws-role-session-name }}
+
+    - name: GCloud Login
+      if: ${{ inputs.cloud == 'GCP' }}
+      uses: blackbird-cloud/github-actions/providers/gcloud@main
+      with:
+        service-account: ${{ inputs.gcloud-service-account }}
+        workload-identity-provider: ${{ inputs.gcloud-workload-identity-provider }}
+        sdk-version: ${{ inputs.gcloud-sdk-version }}
+
+    - name: Azure Login
+      if: ${{ inputs.cloud == 'Azure' }}
+      uses: blackbird-cloud/github-actions/providers/azure@main
+      with:
+        client-id: ${{ inputs.azure-client-id }}
+        subscription-id: ${{ inputs.azure-subscription-id }}
+        tenant-id: ${{ inputs.azure-tenant-id }}
 
     - name: Terragrunt Apply
       uses: gruntwork-io/terragrunt-action@v2

@@ -1,0 +1,22 @@
+---
+name: Run Terraform Format
+description: Run Terraform Format
+inputs:
+  matrix:
+    description: folders to run the format on
+    required: false
+    default: .
+
+runs:
+  using: composite
+  steps:
+    - name: Checkout
+      uses: blackbird-cloud/github-actions/checkout@main
+
+    - name: Terragrunt Format
+      uses: gruntwork-io/terragrunt-action@v2
+      with:
+        tf_version: ${{ env.tf_version }}
+        tg_version: ${{ env.tg_version }}
+        tg_dir: ${{ inputs.matrix }}
+        tg_command: hclfmt --terragrunt-check --terragrunt-diff

@@ -1,13 +1,13 @@
 ---
-name: Run Terraform Plan
-description: Run Terraform Plan
+name: Run Terraform Destroy
+description: Run Terraform Destroy
 inputs:
   cloud:
-    description: Cloud to run the plan on
+    description: Cloud to run the destroy on
     required: true
     default: AWS
   matrix:
-    description: folders to run the plan on
+    description: folders to run the destroy on
     required: false
     default: .
   aws-region:
@@ -67,10 +67,10 @@ runs:
         subscription-id: ${{ inputs.azure-subscription-id }}
         tenant-id: ${{ inputs.azure-tenant-id }}
 
-    - name: Terragrunt Plan
+    - name: Terragrunt Destroy
       uses: gruntwork-io/terragrunt-action@v2
       with:
         tf_version: ${{ env.tf_version }}
         tg_version: ${{ env.tg_version }}
         tg_dir: ${{ inputs.matrix }}
-        tg_command: run-all plan
+        tg_command: run-all destroy
