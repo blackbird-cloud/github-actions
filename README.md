@@ -14,17 +14,20 @@ Getting state from the following supported providers
 jobs:
   setup:
     runs-on: ubuntu-latest
+    outputs:
+      matrix: ${{ steps.setup.outputs.matrix }}
     steps:
-      - uses: blackbird-cloud/github-actions/setup@v1    
-      - uses: blackbird-cloud/github-actions/changed-files
+      - uses: blackbird-cloud/github-actions/setup@v1
+        id: setup
   terraform:
-    runs-on: ubunut-latest
+    runs-on: ubuntu-latest
+    needs: setup
     strategy:
       matrix:
-        target: ${{ jobs.setup.output.matrix }}
+        target: ${{ needs.setup.output.matrix }}
     steps:
-      - uses: blackbird-cloud/github-actions/terragrunt-aws
-      - uses: blackbird-cloud/github-actions/terragrunt-plan@v1    
+      - uses: blackbird-cloud/github-actions/terragrunt/apply@v1
         with:
+          cloud: AWS
           matrix: ${{ matrix.target }}
 ```

@@ -12,10 +12,9 @@ outputs:
 runs:
   using: "composite"
   steps:
-    - name: Checkout
-      uses: ../checkout
+    - uses: blackbird-cloud/github-actions/checkout@main
 
-    - uses: ../changed-files
+    - uses: blackbird-cloud/github-actions/changed-files@main
       id: changed-files
       with: 
         folder: ${{ inputs.folder }}

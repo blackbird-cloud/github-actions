@@ -13,11 +13,11 @@ runs:
   using: "composite"
   steps:
     - name: Checkout
-      uses: ../clone
+      uses: blackbird-cloud/github-actions/checkout@main
     
     - name: AWS Login
       if: ${{ inputs.cloud == 'AWS' }}
-      uses: ../aws
+      uses: blackbird-cloud/github-actions/terragrunt/aws@main
 
     - name: Terragrunt Apply
       uses: gruntwork-io/terragrunt-action@v2
