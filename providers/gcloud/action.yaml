@@ -1,0 +1,30 @@
+---
+name: GCloud Login
+description: Login to Google Cloud using service account key
+inputs:
+  region:
+    description: AWS region
+    required: true
+    default: europe-west1
+  workload-identity-provider:
+    description: The workload identity provider to use
+    required: true
+  service-account:
+    description: The service account to use
+    required: true
+
+runs:
+  using: composite
+  steps:
+    - id: auth
+      uses: google-github-actions/auth@v2
+      with:
+        workload_identity_provider: ${{ inputs.workload-identity-provider }}
+        service_account: ${{ inputs.service-account }}
+
+    - name: Set up Cloud SDK
+      uses: google-github-actions/setup-gcloud@v2
+
+    - name: Use gcloud CLI
+      shell: bash
+      run: gcloud info
