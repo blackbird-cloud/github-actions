@@ -1,0 +1,23 @@
+name: Create a Github Release and tag
+
+on:
+  workflow_call:
+    outputs:
+      tag_name:
+        description: Tag name of the release
+        value: ${{ jobs.release.outputs.tag_name }}
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    env:
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    outputs:
+      tag_name: ${{ steps.tag.outputs.tag_name }}
+    steps:
+      - uses: rymndhng/release-on-push-action@master
+        id: tag
+        with:
+          bump_version_scheme: minor
+          tag_prefix: "v"
+          release_name: "Release <RELEASE_TAG>"
